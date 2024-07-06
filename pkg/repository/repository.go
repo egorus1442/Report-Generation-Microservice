@@ -1,8 +1,12 @@
 package repository
 
-import "github.com/jmoiron/sqlx"
+import (
+	rgm "github.com/egorus1442/Report-Generation-Microservice"
+	"github.com/jmoiron/sqlx"
+)
 
 type Autorization interface {
+	CreateUser(user rgm.User) (int, error)
 }
 
 type SalesList interface {
@@ -18,5 +22,7 @@ type Repository struct {
 }
 
 func NewRepository(db *sqlx.DB) *Repository {
-	return &Repository{}
+	return &Repository{
+		Autorization: NewAuthPostgres(db),
+	}
 }

@@ -1,8 +1,12 @@
 package service
 
-import "github.com/egorus1442/Report-Generation-Microservice/pkg/repository"
+import (
+	rgm "github.com/egorus1442/Report-Generation-Microservice"
+	"github.com/egorus1442/Report-Generation-Microservice/pkg/repository"
+)
 
 type Autorization interface {
+	CreateUser(user rgm.User) (int, error)
 }
 
 type SalesList interface {
@@ -18,5 +22,7 @@ type Service struct {
 }
 
 func NewService(repos *repository.Repository) *Service {
-	return &Service{}
+	return &Service{
+		Autorization: NewAuthService(repos.Autorization),
+	}
 }
