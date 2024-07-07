@@ -3,24 +3,52 @@ package service
 import (
 	"crypto/sha1"
 	"fmt"
+	"time"
 
+	"github.com/dgrijalva/jwt-go"
 	rgm "github.com/egorus1442/Report-Generation-Microservice"
 	"github.com/egorus1442/Report-Generation-Microservice/pkg/repository"
 )
 
-const salt = "rjngeun485584bgrbv"
+const (
+	salt       = "hjqrhjqw124617ajfhajs"
+	signingKey = "qrkjk#4#%35FSFJlja#4353KSFjH"
+	tokenTTL   = 12 * time.Hour
+)
 
-type AuthService struct {
-	repo repository.Autorization
+type tokenClaims struct {
+	jwt.StandardClaims
+	UserId int `json:"user_id"`
 }
 
-func NewAuthService(repo repository.Autorization) *AuthService {
+type AuthService struct {
+	repo repository.Authorization
+}
+
+func NewAuthService(repo repository.Authorization) *AuthService {
 	return &AuthService{repo: repo}
 }
 
 func (s *AuthService) CreateUser(user rgm.User) (int, error) {
 	user.Password = generatePasswordHash(user.Password)
 	return s.repo.CreateUser(user)
+}
+
+func (s *AuthService) GenerateToken(username, password string) (string, error) {
+	user, err := s.repo.GetUser(username, generatePasswordHash(password))
+	if err != nil {
+		return "", err
+	}
+
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, &tokenClaims{
+		StandardClaims: jwt.StandardClaims{
+			ExpiresAt: time.Now().Add(tokenTTL).Unix(),
+			IssuedAt:  time.Now().Unix(),
+		},
+		UserId: user.Id,
+	})
+
+	return token.SignedString([]byte(signingKey))
 }
 
 func generatePasswordHash(password string) string {

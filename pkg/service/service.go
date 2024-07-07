@@ -5,8 +5,9 @@ import (
 	"github.com/egorus1442/Report-Generation-Microservice/pkg/repository"
 )
 
-type Autorization interface {
+type Authorization interface {
 	CreateUser(user rgm.User) (int, error)
+	GenerateToken(username, password string) (string, error)
 }
 
 type SalesList interface {
@@ -16,13 +17,13 @@ type SalesItem interface {
 }
 
 type Service struct {
-	Autorization
+	Authorization
 	SalesList
 	SalesItem
 }
 
 func NewService(repos *repository.Repository) *Service {
 	return &Service{
-		Autorization: NewAuthService(repos.Autorization),
+		Authorization: NewAuthService(repos.Authorization),
 	}
 }

@@ -5,8 +5,9 @@ import (
 	"github.com/jmoiron/sqlx"
 )
 
-type Autorization interface {
+type Authorization interface {
 	CreateUser(user rgm.User) (int, error)
+	GetUser(username, password string) (rgm.User, error)
 }
 
 type SalesList interface {
@@ -16,13 +17,13 @@ type SalesItem interface {
 }
 
 type Repository struct {
-	Autorization
+	Authorization
 	SalesList
 	SalesItem
 }
 
 func NewRepository(db *sqlx.DB) *Repository {
 	return &Repository{
-		Autorization: NewAuthPostgres(db),
+		Authorization: NewAuthPostgres(db),
 	}
 }
