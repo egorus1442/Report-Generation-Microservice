@@ -12,6 +12,8 @@ type Authorization interface {
 }
 
 type SalesList interface {
+	Create(userId int, list rgm.SalesList) (int, error)
+	GetAll(userId int) ([]rgm.SalesList, error)
 }
 
 type Service struct {
@@ -22,5 +24,6 @@ type Service struct {
 func NewService(repos *repository.Repository) *Service {
 	return &Service{
 		Authorization: NewAuthService(repos.Authorization),
+		SalesList:     NewSalesListService(repos.SalesList),
 	}
 }

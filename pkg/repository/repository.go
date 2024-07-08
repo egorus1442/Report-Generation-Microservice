@@ -11,6 +11,8 @@ type Authorization interface {
 }
 
 type SalesList interface {
+	Create(userId int, list rgm.SalesList) (int, error)
+	GetAll(userId int) ([]rgm.SalesList, error)
 }
 
 type Repository struct {
@@ -21,5 +23,6 @@ type Repository struct {
 func NewRepository(db *sqlx.DB) *Repository {
 	return &Repository{
 		Authorization: NewAuthPostgres(db),
+		SalesList:     NewSalesListPostgres(db),
 	}
 }
