@@ -10,8 +10,6 @@ const (
 	usersTable      = "users"
 	salesListsTable = "sales_lists"
 	usersListsTable = "users_lists"
-	salesItemsTable = "sales_items"
-	listsItemsTable = "lists_items"
 )
 
 type Config struct {

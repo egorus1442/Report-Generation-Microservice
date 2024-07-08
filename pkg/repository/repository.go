@@ -13,13 +13,9 @@ type Authorization interface {
 type SalesList interface {
 }
 
-type SalesItem interface {
-}
-
 type Repository struct {
 	Authorization
 	SalesList
-	SalesItem
 }
 
 func NewRepository(db *sqlx.DB) *Repository {

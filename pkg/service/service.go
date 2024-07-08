@@ -14,13 +14,9 @@ type Authorization interface {
 type SalesList interface {
 }
 
-type SalesItem interface {
-}
-
 type Service struct {
 	Authorization
 	SalesList
-	SalesItem
 }
 
 func NewService(repos *repository.Repository) *Service {
